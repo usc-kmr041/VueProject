@@ -1,24 +1,22 @@
 <template>
 <HeaderMenu />
-<h1>Update Receipt Details:</h1>
+<h1>Add Receipts</h1>
 <form class = "addreceipt">
-    <h3>Product:</h3>
 <input type="text" product = "product" placeholder ="Enter product" v-model = "receipt.product" />
-    <h3>Store:</h3>
 <input type="text" product = "store" placeholder ="Enter Store" v-model = "receipt.store" />
-<button type = "button" v-on:click="updateReceipt">Update Receipt</button>
+<button type = "button" v-on:click="addPhoto">Upload Photo</button><br><br>
+<button type = "button" v-on:click="addReceipt">Add New Receipt</button>
 </form>
 </template>
-
 <script>
-import HeaderMenu from './HeaderMenu.vue'
-import axios from 'axios'
+import HeaderMenu from './HeaderMenu.vue';
+import axios from 'axios';
 export default {
-    name:'UpdatePage',
+    name:'AddPage',
     components: {
         HeaderMenu
     },
-        data(){
+    data(){
         return{ receipt :{
             product:'',
             store:''
@@ -26,29 +24,30 @@ export default {
         }
     },
     methods:{
-       async updateReceipt()
+
+        addPhoto(){
+            alert("photo upload")
+        },
+
+        async addReceipt()
         {
             console.warn(this.receipt)
-            const result = await axios.put("http://localhost:3000/receipts/"+this.$route.params.id,{
+            const result = await axios.post("http://localhost:3000/receipts",{
                 product:this.receipt.product,
                 store:this.receipt.store, 
             });
-            if (result.status == 200){
+            if (result.status == 201){
                 this.$router.push({name:"HomePage"})
             }
+            console.warn("result",result)
         }
     },
-        async mounted(){
+        mounted(){
         let user = localStorage.getItem('userinfo');
         if(!user)
         {
             this.$router.push({name:"SignUp"})
         }
-
-        const result = await axios.get('http://localhost:3000/receipts/'+this.$route.params.id)
-        //console.warn(this.$route.params.id)
-        console.warn(result.data)
-        this.receipt = result.data
     }
 }
 </script>

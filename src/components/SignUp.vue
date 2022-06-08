@@ -6,6 +6,10 @@
     <input type="text" v-model="username" placeholder="Enter Username" />
     <input type="password" v-model="password" placeholder="Enter Password" />
     <button v-on:click="signUp">Register</button>
+    <p>
+        already have an account? proceed here:
+    <router-link to ="/login-page">Login Page</router-link>
+    </p>
 </div>
 
 </template>
@@ -34,9 +38,16 @@ export default {
             console.warn(result);
             if(result.status==201)
             {
-                alert("registered!")
                 localStorage.setItem("userinfo",JSON.stringify(result.data))
+                this.$router.push({name:"HomePage"})
             }
+        }
+    },
+    mounted(){
+        let user = localStorage.getItem('userinfo');
+        if(user)
+        {
+            this.$router.push({name:"HomePage"})
         }
     }
 }
@@ -46,7 +57,7 @@ export default {
 .image1{
     width:400px
 }
-.register input{
+.register input, .loginpage input{
     margin-right: auto;
     margin-left: auto;
     height: 50px;
@@ -58,7 +69,7 @@ export default {
 
 }
 
-.register button{
+.register button, .loginpage button{
     width: 200px;
     padding: 15px;
     background: mediumslateblue;
